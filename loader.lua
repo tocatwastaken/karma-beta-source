@@ -1,8 +1,10 @@
 --KARMA rewrite V1
-currentver = "1.4b"
+currentver = "1.0b"
 latestver = loadstring(game:HttpGet("https://raw.githubusercontent.com/bakersrule2020/karma-files/main/version"))()
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+game.Players.LocalPlayer.OsPlatform = "am using karma :D"
 
 Notification:Notify(
 	    {Title = "Welcome", Description = "Welcome to karma client version " .. currentver .. "!"},
@@ -14,6 +16,7 @@ local selectedtarget = "None"
 local player = game.Players
 local httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 local LocalPlayer = player.LocalPlayer
+local Humanoid = LocalPlayer.Character.Humanoid
 local karmapath = "/KARMA/"
 local musparent = game.CoreGui
 local GuiService = game:GetService("GuiService")
@@ -35,6 +38,16 @@ function getrequest(url)
 	})
 	return response.Body
 end
+function checkstatus(plrinst)
+	if plrinst.OsPlatform == "am using karma :D" then
+		return "Karma User"
+	elseif plrinst.OsPlatform == "am karma owner :D" then
+		return "Karma Owner"
+	else
+		return "Regular Player"
+	end
+end
+
 function vercheck()
 	Notification:Notify(
 	    {Title = "Update Checker", Description = "Checking for updates, hold on a sec..."},
@@ -93,13 +106,38 @@ function musrefresh()
 end
 local window1 = engine.new({
     text = "Karma Client",
-    size = UDim2.new(800, 800),
+    size = Vector2.new(600, 600),
 })
 window1.open()
 local exectab = window1.new({
 	text = "General Hacks"
 })
-local fly = exectab.new("switch", {
+local movefold = exectab.new("folder", {
+	text = "Movement Hacks"
+})
+local walkslider = movefold.new("slider", {
+    text = "Walkspeed",
+    color = Color3.new(0.8, 0.5, 0),
+    min = 16,
+    max = 1000,
+    value = 16,
+    rounding = 1,
+})
+local jumpslider = movefold.new("slider", {
+    text = "Jumppower",
+    color = Color3.new(0.8, 0.5, 0),
+    min = 50,
+    max = 1000,
+    value = 16,
+    rounding = 1,
+})
+walkslider.event:Connect(function(val)
+	Humanoid.WalkSpeed = val
+end)
+jumpslider.event:Connect(function(val)
+	Humanoid.JumpPower = val
+end)
+local fly = movefold.new("switch", {
 	text = "Flyhack",
 })
 fly.event:Connect(function(bool)
@@ -165,8 +203,10 @@ local fold2 = tab1.new("folder", {
 })
 for i,v in ipairs(game.Players:GetChildren()) do
 	dock = fold1.new("dock")
+	platreturn = checkstatus(v)
 	dock.new("label", {
-		text = v.DisplayName
+		
+		text = v.DisplayName .. " | " .. platreturn
 	})
 	sel = dock.new("button", {text = "Select"})
 	sel.event:Connect(function()
@@ -181,9 +221,11 @@ for i,v in ipairs(game.Players:GetChildren()) do
 	end)
 end
 player.PlayerConnecting:Connect(function(plr)
+	platreturn = checkstatus(v)
 		dock = fold1.new("dock")
 	dock.new("label", {
-		text = v.DisplayName
+		
+		text = v.DisplayName .. " | " .. platreturn
 	})
 	sel = dock.new("button", {text = "Select"})
 	sel.event:Connect(function()
@@ -247,4 +289,38 @@ local contab = window1.new({
 })
 local musrefreshbtn = contab.new("button",{text = "Refresh Music"})
 musrefreshbtn.event:Connect(musrefresh)
+local muscontrolbtn = contab.new("switch", {text = "Play/Pause BG Music"})
+muscontrolbtn.on = true
+muscontrolbtn.event:Connect(function(bool)
+	menubg.Playing = bool 
+end)
+local miscfold = exectab.new("folder", {
+	text = "Misc. Functions"
+})
+local altcontbtn = miscfold.new("button", {
+	text = "KARMA Application Bots"
+
+})
+
 writefile(karmapath .. "ranalready.txt", "This file lets karma know you've ran it before, so you don't need to download assets.")
+function windowanim()
+	window1.text = "K"
+	wait(0.2)
+	window1.text = "KA"
+	wait(0.2)
+	window1.text = "KAR"
+	wait(0.2)
+	window1.text = "KARM"
+	wait(0.2)
+	window1.text = "KARMA"
+	wait(0.2)
+	window1.text = "KARM"
+	wait(0.2)
+	window1.text = "KAR"
+	wait(0.2)
+	window1.text = "KA"
+	wait(0.2)
+	window1.text = "K"
+	windowanim()
+end
+windowanim()
