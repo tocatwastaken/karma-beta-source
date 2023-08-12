@@ -4,7 +4,7 @@ latestver = loadstring(game:HttpGet("https://raw.githubusercontent.com/bakersrul
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
-game.Players.LocalPlayer.OsPlatform = "KC"
+game.Players.LocalPlayer.OsPlatform = "KO"
 
 Notification:Notify(
 	    {Title = "Welcome", Description = "Welcome to karma client version " .. currentver .. "!"},
@@ -84,7 +84,7 @@ if isfile(karmapath .. "ranalready.txt") then
 else
 downloadfile("KARMA/Dependencies/squid.lua", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/squidhaxongod.lua")
 downloadfile("KARMA/Dependencies/flymodule.lua", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/flymodule.lua")
-downloadfile(muspath .. "karmabg.ogg", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/karmabg.ogg")
+downloadfile(muspath .. "karmabg.ogg", "https://github.com/bakersrule2020/karma-beta-source/raw/main/karmabg.ogg")
 end
 dofile("KARMA/Dependencies/flymodule.lua")
 
@@ -297,6 +297,19 @@ end)
 local miscfold = exectab.new("folder", {
 	text = "Misc. Functions"
 })
+local musplrcont = miscfold.new("folder", {
+	text = "Music Player"
+})
+local musdrop = musplrcont.new("dropdown", {
+	text = "Select A File..."
+})
+local ref_files = musplrcont.new("button", {
+	text = "Refresh files"
+})
+local play_file = musplrcont.new("switch", {
+	text = "Play selected .ogg file"
+})
+
 local altcontbtn = miscfold.new("button", {
 	text = "KARMA Application Bots"
 
