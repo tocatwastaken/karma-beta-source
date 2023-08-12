@@ -4,7 +4,7 @@ latestver = loadstring(game:HttpGet("https://raw.githubusercontent.com/bakersrul
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
-game.Players.LocalPlayer.OsPlatform = "am using karma :D"
+game.Players.LocalPlayer.OsPlatform = "KC"
 
 Notification:Notify(
 	    {Title = "Welcome", Description = "Welcome to karma client version " .. currentver .. "!"},
@@ -39,9 +39,9 @@ function getrequest(url)
 	return response.Body
 end
 function checkstatus(plrinst)
-	if plrinst.OsPlatform == "am using karma :D" then
+	if plrinst.OsPlatform == "KC" then
 		return "Karma User"
-	elseif plrinst.OsPlatform == "am karma owner :D" then
+	elseif plrinst.OsPlatform == "KO" then
 		return "Karma Owner"
 	else
 		return "Regular Player"
