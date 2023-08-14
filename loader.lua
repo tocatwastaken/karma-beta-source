@@ -1,15 +1,91 @@
 --KARMA rewrite V1
-currentver = "1.0b"
-latestver = loadstring(game:HttpGet("https://raw.githubusercontent.com/bakersrule2020/karma-files/main/version"))()
+_G["KarmaBotConfig"] = {}
+clientbranch = "stable" --stable is regular (live) karma build, Canary is this build
+
+function GetDate() --stolen from domainx because i'm bad at doing this shit lmaoooo
+	local date = {}
+	local months = {
+		{"January", 31};
+		{"February", 28};
+		{"March", 31};
+		{"April", 30};
+		{"May", 31};
+		{"June", 30};
+		{"July", 31};
+		{"August", 31};
+		{"September", 30};
+		{"October", 31};
+		{"November", 30};
+		{"December", 31};
+	}
+	local t = tick()
+	date.total = t
+	date.seconds = math.floor(t % 60)
+	date.minutes = math.floor((t / 60) % 60)
+	date.hours = math.floor((t / 60 / 60) % 24)
+	date.year = (1970 + math.floor(t / 60 / 60 / 24 / 365.25))
+	date.yearShort = tostring(date.year):sub(-2)
+	date.isLeapYear = ((date.year % 4) == 0)
+	date.isAm = (date.hours < 12)
+	date.hoursPm = (date.isAm and date.hours or (date.hours == 12 and 12 or (date.hours - 12)))
+	if (date.hoursPm == 0) then date.hoursPm = 12 end
+	if (date.isLeapYear) then
+		months[2][2] = 29
+	end
+	do
+		date.dayOfYear = math.floor((t / 60 / 60 / 24) % 365.25)
+		local dayCount = 0
+		for i,month in pairs(months) do
+			dayCount = (dayCount + month[2])
+			if (dayCount > date.dayOfYear) then
+				date.monthWord = month[1]
+				date.month = i
+				date.day = (date.dayOfYear - (dayCount - month[2]) + 1)
+				break
+			end
+		end
+	end
+	function date:format(str)
+		str = str
+		:gsub("#s", ("%.2i"):format(self.seconds))
+		:gsub("#m", ("%.2i"):format(self.minutes))
+		:gsub("#h", tostring(self.hours))
+		:gsub("#H", tostring(self.hoursPm))
+		:gsub("#Y", tostring(self.year))
+		:gsub("#y", tostring(self.yearShort))
+		:gsub("#a", (self.isAm and "AM" or "PM"))
+		return str
+	end
+	return date
+end
+PlaceId, JobId = game.PlaceId, game.JobId
+TeleportService = game:GetService("TeleportService")
+currentver = "2.1b"
+
+if clientbranch == "stable" then
+	upbranch = "Live"
+	latestver = loadstring(game:HttpGet("https://raw.githubusercontent.com/bakersrule2020/karma-files/main/version"))()
+else
+	upbranch = "Canary"
+	latestver = loadstring(game:HttpGet("https://raw.githubusercontent.com/bakersrule2020/karma-beta-source/main/version"))()
+end
+
+
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
 game.Players.LocalPlayer.OsPlatform = "KO"
+local executor = identifyexecutor()
 
 Notification:Notify(
 	    {Title = "Welcome", Description = "Welcome to karma client version " .. currentver .. "!"},
 	    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
 		 {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+		 if executor == "Delta UWP" or "Delta" then
+			Notification:Notify({Title = "Known Issue", Description = "Sometimes the UI padding will break. When this happens just re-execute karma,"},
+	    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
+		 {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+		 end
 
 local engine = loadstring(game:HttpGet("https://raw.githubusercontent.com/Singularity5490/rbimgui-2/main/rbimgui-2.lua"))()
 local selectedtarget = "None"
@@ -20,16 +96,31 @@ local Humanoid = LocalPlayer.Character.Humanoid
 local karmapath = "/KARMA/"
 local musparent = game.CoreGui
 local GuiService = game:GetService("GuiService")
-local deppath = karmapath .. "/Dependencies/"
-local muspath = karmapath .. "/MenuBG/"
+local deppath = karmapath .. "Dependencies/"
+local musplrpath = karmapath .. "Music Player (OGG files only)/"
+local logpath = karmapath .. "Logs/"
+local muspath = karmapath .. "MenuBG/"
+local respath = karmapath .. "Resources/"
 for i,v in ipairs(musparent:GetChildren()) do
 	if v:IsA("Sound") then
 		v:Destroy()
 	end
 end
+_G["KarmaBotConfig"].Host = LocalPlayer.Name
 makefolder(karmapath)
+makefolder(logpath)
+makefolder(respath)
 makefolder(deppath)
 makefolder(muspath)
+makefolder(musplrpath)
+local logname = logpath .. GetDate():format("#Y #H-#m-#s #a") .. ".log"
+writefile(logname, "KARMA log file \n")
+writefile(musplrpath .. "Instructions.txt", "To use this, drop ogg (Vorbis) files into the folder and then hit refresh files in the music player!")
+function log(text)
+	game:GetService("TextChatService").TextChannels.RBXGeneral:DisplaySystemMessage("[" .. GetDate():format("#h:#m") .. "]: " .. text)
+	appendfile(logname, "[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
+end
+log("Executed with " .. identifyexecutor())
 function getrequest(url)
 	response = httprequest({
 		Url = url,
@@ -49,31 +140,60 @@ function checkstatus(plrinst)
 end
 
 function vercheck()
-	Notification:Notify(
-	    {Title = "Update Checker", Description = "Checking for updates, hold on a sec..."},
-	    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
-		 {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
-	if currentver == latestver then
+	log("Begin update check...")
+	if upbranch == "Live" then
+		log("Update branch: Live")
 		Notification:Notify(
-	    {Title = "Update Checker", Description = "Karma is up to date, starting..."},
-	    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
-		 {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+			{Title = "Update Checker", Description = "Checking for updates, hold on a sec..."},
+			{OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
+			{Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+		if currentver == latestver then
+			log("Karma is latest version, no need to update.")
+			Notification:Notify(
+			{Title = "Update Checker", Description = "Karma is up to date, starting..."},
+			{OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
+			{Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+		else
+			log("Karma is out of date!")
+			Notification:Notify(
+			{Title = "Outdated", Description = "Karma appears to be outdated. Reloading!"},
+			{OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
+			{Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+			deletefile(karmapath .. "ranalready.txt")
+			loadstring(getrequest("https://raw.githubusercontent.com/bakersrule2020/karma-files/main/loader.lua"))
+		end
 	else
+		log("Update branch: Canary")
 		Notification:Notify(
-	    {Title = "Outdated", Description = "Karma appears to be outdated. Reloading!"},
-	    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
-		 {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
-		 loadstring(getrequest("https://raw.githubusercontent.com/bakersrule2020/karma-files/main/loader.lua"))
+			{Title = "Update Checker", Description = "Checking for updates, hold on a sec..."},
+			{OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
+			{Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+		if currentver == latestver then
+			log("Karma is latest version, no need to update.")
+			Notification:Notify(
+			{Title = "Update Checker", Description = "Karma is up to date, starting..."},
+			{OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
+			{Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+		else
+			log("Karma is out of date!")
+			Notification:Notify(
+			{Title = "Outdated", Description = "Karma appears to be outdated. Reloading!"},
+			{OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
+			{Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+			deletefile(karmapath .. "ranalready.txt")
+			loadstring(getrequest("https://raw.githubusercontent.com/bakersrule2020/karma-beta-source/main/loader.lua"))
+		end
 	end
 end
 vercheck()
 function downloadfile(filename, url)
-	
+	log("Downloading file: " .. filename .. " From URL: " .. url)
 	Notification:Notify(
 	    {Title = "Downloading File...", Description = "Downloading " .. filename .. " From " .. url},
 	    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
 		 {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
-writefile(filename, game:HttpGet(url))
+	writefile(filename, game:HttpGet(url))
+	log("Downloaded file: " .. filename)
 end
 if isfile(karmapath .. "ranalready.txt") then
 	Notification:Notify(
@@ -82,6 +202,7 @@ if isfile(karmapath .. "ranalready.txt") then
 		 {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end}
 	)
 else
+downloadfile(respath .. "karmaicon.png", "https://raw.githubusercontent.com/bakersrule2020/karma-beta-source/main/13690184122_512.png")
 downloadfile("KARMA/Dependencies/squid.lua", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/squidhaxongod.lua")
 downloadfile("KARMA/Dependencies/flymodule.lua", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/flymodule.lua")
 downloadfile(muspath .. "karmabg.ogg", "https://github.com/bakersrule2020/karma-beta-source/raw/main/karmabg.ogg")
@@ -92,6 +213,9 @@ local menubg = Instance.new("Sound", musparent)
 menubg.SoundId = getcustomasset(muspath .. "karmabg.ogg")
 menubg.Looped = true
 menubg:Play()
+function setmenuaudio(string)
+	return getcustomasset(string)
+end
 function musrefresh()
 	Notification:Notify(
 	    {Title = "Refresh In Progress", Description = "Please wait while we refresh the background music for you..."},
@@ -109,6 +233,7 @@ local window1 = engine.new({
     size = Vector2.new(600, 600),
 })
 window1.open()
+--general hacks tab
 local exectab = window1.new({
 	text = "General Hacks"
 })
@@ -117,19 +242,16 @@ local movefold = exectab.new("folder", {
 })
 local walkslider = movefold.new("slider", {
     text = "Walkspeed",
-    color = Color3.new(0.8, 0.5, 0),
+ 
     min = 16,
     max = 1000,
     value = 16,
-    rounding = 1,
 })
 local jumpslider = movefold.new("slider", {
     text = "Jumppower",
-    color = Color3.new(0.8, 0.5, 0),
     min = 50,
     max = 1000,
     value = 16,
-    rounding = 1,
 })
 walkslider.event:Connect(function(val)
 	Humanoid.WalkSpeed = val
@@ -192,6 +314,7 @@ local rembtn = squidhaxfold.new("button", {
 rembtn.event:Connect(function()
 	dofile(deppath .. "squid.lua")
 end)
+--target tab
 local tab1 = window1.new({
     text = "Target",
 })
@@ -284,6 +407,7 @@ inspectbtn.event:Connect(function()
 	GuiService:CloseInspectMenu()
 	GuiService:InspectPlayerFromUserId(targetplayer.UserId)
 end)
+--settings
 local contab = window1.new({
 	text = "Settings",
 })
@@ -294,6 +418,26 @@ muscontrolbtn.on = true
 muscontrolbtn.event:Connect(function(bool)
 	menubg.Playing = bool 
 end)
+local customuibtn = contab.new("button",{text = "Load Custom UI (Pause Menu)"})
+customuibtn.event:Connect(function()
+	log("Init custom UI...")
+	local menu = game.CoreGui.RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer
+	local karmapagebtn = menu["1"]
+	local pageview = menu.PageViewClipper.PageView.PageViewInnerFrame
+	karmapagebtn.ImageButton.ImageColor3 = Color3.new(85, 0, 0)
+	karmapagebtn.ImageButton.Frame.TextLabel.Text = "KARMA Menu"
+	karmapagebtn.Visible = true
+	for i,v in ipairs(pageview:GetChildren()) do
+		if v.Name == "Page" then
+			log("Found settings page!")
+		elseif v.Name == "Players" then
+			log("Found players page!")
+		else
+			log("Found an unknown page named " .. v.Name .. ", likely not usable.")
+	end
+	end
+end)
+--misc functions
 local miscfold = exectab.new("folder", {
 	text = "Misc. Functions"
 })
@@ -303,37 +447,102 @@ local musplrcont = miscfold.new("folder", {
 local musdrop = musplrcont.new("dropdown", {
 	text = "Select A File..."
 })
+selectedsong = "None"
+function refreshsongs()
+	for i,v in ipairs(listfiles(musplrpath)) do
+		log("Found file: " .. v .. ". Checking if it is an OGG...")
+		if string.find(v,".ogg") then
+			log("File " .. v .. " Is an OGG, adding to list...")
+			songlisting = musdrop.new(v)
+		end
+	end
+end
+refreshsongs()
+function remallchoices()
+end
+local selectedsong
+musdrop.event:Connect(function(choise)
+	selectedsong = choise
+end)
 local ref_files = musplrcont.new("button", {
 	text = "Refresh files"
 })
+ref_files.event:Connect(refreshsongs)
 local play_file = musplrcont.new("switch", {
 	text = "Play selected .ogg file"
 })
-
+play_file.event:Connect(function(bool)
+	if bool then
+		menubg:Stop()
+		menubg.SoundId = getcustomasset(selectedsong)
+		menubg:Play()
+	else
+		menubg:Stop()
+		menubg.SoundId = getcustomasset(muspath .. "karmabg.ogg")
+		menubg:Play()
+	end
+end)
+local vol_slider = musplrcont.new("slider", {
+	text = "Music Volume",
+	rounding = false,
+	min = 0,
+	max = 100,
+})
+vol_slider.event:Connect(function(val)
+	menubg.Volume = val / 100
+end)
 local altcontbtn = miscfold.new("button", {
-	text = "KARMA Application Bots"
+	text = "Rejoin"
 
 })
+local isaltcontrolpub = false
+if isaltcontrolpub then
+	local newslabel = miscfold.new("folder", {
+		text = "(WIP) Alt control"
+	})
+	local scanbtn = newslabel.new("button", {
+		text = "Scan for bots"
+	})
+	local selectedbot = "None"
+	local selfold = newslabel.new("folder", {
+		text = "Select bot"
+	})
 
-writefile(karmapath .. "ranalready.txt", "This file lets karma know you've ran it before, so you don't need to download assets.")
-function windowanim()
-	window1.text = "K"
-	wait(0.2)
-	window1.text = "KA"
-	wait(0.2)
-	window1.text = "KAR"
-	wait(0.2)
-	window1.text = "KARM"
-	wait(0.2)
-	window1.text = "KARMA"
-	wait(0.2)
-	window1.text = "KARM"
-	wait(0.2)
-	window1.text = "KAR"
-	wait(0.2)
-	window1.text = "KA"
-	wait(0.2)
-	window1.text = "K"
-	windowanim()
+
+	scanbtn.event:Connect(function()
+		game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("identbot")
+		game:GetService("TextChatService").TextChannels.RBXGeneral.MessageReceived:Connect(function(message)
+			if message.Text == "identifnetworkforkarma" then
+				seldock = selfold.new("dock")
+				sellabel = seldock.new("label", {text = message.TextSource.Name})
+				botselbtn = seldock.new("button", {text = "Select bot"})
+				botselbtn.event:Connect(function()
+					selectedbot = message.TextSource.Name
+				end)
+			end
+		end)
+	end)
+
+	local funcfold = newslabel.new("folder", {
+		text = "Bot Functions"
+	})
+	local mkbotrj = funcfold.new("button", {text = "Make bot rejoin (You'll need to re-execute the bot script!)"})
+	local mkbotfollow = funcfold.new("switch", {text = "Make bot follow you"})
+	local sayfold = funcfold.new("folder", {text = "Bot say"})
+	local inputtextbox = instance.New("TextBox",sayfold.self)
+	inputtextbox.BackgroundColor3 = Color3.new(0, 0, 0)
+
+	inputtextbox.PlaceholderText = "What you want the bot to say."
+	instance.New("UICorner", inputtextbox)
+
 end
-windowanim()
+altcontbtn.event:Connect(function()
+	TeleportService:TeleportToPlaceInstance(PlaceId, JobId, LocalPlayer)
+end)
+
+
+if game:GetService("TextChatService").TextChannels.RBXGeneral then
+	game:GetService("TextChatService").TextChannels.RBXGeneral:DisplaySystemMessage("[KARMA Client]: Thanks for using KARMA!")
+else
+end
+writefile(karmapath .. "ranalready.txt", "This file lets karma know you've ran it before, so you don't need to download assets.")
