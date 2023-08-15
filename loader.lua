@@ -116,7 +116,9 @@ local logname = logpath .. GetDate():format("#Y #H-#m-#s #a") .. ".log"
 writefile(logname, "KARMA log file \n")
 writefile(musplrpath .. "Instructions.txt", "To use this, drop ogg (Vorbis) files into the folder and then hit refresh files in the music player!")
 function log(text)
+	if game:GetService("TextChatService").TextChannels.RBXGeneral then
 	game:GetService("TextChatService").TextChannels.RBXGeneral:DisplaySystemMessage("[" .. GetDate():format("#h:#m") .. "]: " .. text)
+	end
 	appendfile(logname, "[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
 end
 log("Executed with " .. identifyexecutor())
