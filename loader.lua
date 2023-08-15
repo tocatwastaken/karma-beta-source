@@ -1,6 +1,5 @@
 --KARMA rewrite V1
 _G["KarmaBotConfig"] = {}
-clientbranch = "stable" --stable is regular (live) karma build, Canary is this build
 
 function GetDate() --stolen from domainx because i'm bad at doing this shit lmaoooo
 	local date = {}
@@ -61,7 +60,7 @@ end
 PlaceId, JobId = game.PlaceId, game.JobId
 TeleportService = game:GetService("TeleportService")
 currentver = "2.1b"
-
+clientbranch = ""
 if clientbranch == "stable" then
 	upbranch = "Live"
 	latestver = loadstring(game:HttpGet("https://raw.githubusercontent.com/bakersrule2020/karma-files/main/version"))()
