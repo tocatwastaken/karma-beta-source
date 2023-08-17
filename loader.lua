@@ -1,3 +1,19 @@
+currentver = "2.1b" --DO NOT TOUCH THIS UNLESS YOU WANT TO USE AN OLDER VERSION! IF THIS DIFFERS FROM THE LATEST THE LOADER WILL CHECK FOR UPDATES!
+rconsoletitle("KARMA Client V"..currentver.." By tornvrc")
+rconsoleclear()
+rconsoleprint[[
+
+
+    _  __          _____  __  __             _____ _      _____ ______ _   _ _______ 
+   | |/ /    /\   |  __ \|  \/  |   /\      / ____| |    |_   _|  ____| \ | |__   __|
+   | ' /    /  \  | |__) | \  / |  /  \    | |    | |      | | | |__  |  \| |  | |   
+   |  <    / /\ \ |  _  /| |\/| | / /\ \   | |    | |      | | |  __| | . ` |  | |   
+   | . \  / ____ \| | \ \| |  | |/ ____ \  | |____| |____ _| |_| |____| |\  |  | |   
+   |_|\_\/_/    \_\_|  \_\_|  |_/_/    \_\  \_____|______|_____|______|_| \_|  |_|   
+]]
+rconsoleprint("\nKARMA " .. currentver .. " By tornvrc")
+rconsoleprint("\n------------------------------------------------------------------------------------------------------------------------")
+
 --KARMA rewrite V1
 _G["KarmaBotConfig"] = {}
 
@@ -59,7 +75,7 @@ function GetDate() --stolen from domainx because i'm bad at doing this shit lmao
 end
 PlaceId, JobId = game.PlaceId, game.JobId
 TeleportService = game:GetService("TeleportService")
-currentver = "2.1b"
+
 clientbranch = ""
 if clientbranch == "stable" then
 	upbranch = "Live"
@@ -116,10 +132,9 @@ local logname = logpath .. GetDate():format("#Y #H-#m-#s #a") .. ".log"
 writefile(logname, "KARMA log file \n")
 writefile(musplrpath .. "Instructions.txt", "To use this, drop ogg (Vorbis) files into the folder and then hit refresh files in the music player!")
 function log(text)
-	if game:GetService("TextChatService").TextChannels.RBXGeneral then
-	game:GetService("TextChatService").TextChannels.RBXGeneral:DisplaySystemMessage("[" .. GetDate():format("#h:#m") .. "]: " .. text)
-	end
+	rconsoleprint("[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
 	appendfile(logname, "[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
+	end
 end
 log("Executed with " .. identifyexecutor())
 function getrequest(url)
@@ -423,14 +438,20 @@ local customuibtn = contab.new("button",{text = "Load Custom UI (Pause Menu)"})
 customuibtn.event:Connect(function()
 	log("Init custom UI...")
 	local menu = game.CoreGui.RobloxGui.SettingsClippingShield.SettingsShield.MenuContainer
+	menu.BackgroundColor3 = Color3.new(85, 0, 0)
 	local karmapagebtn = menu["1"]
 	local pageview = menu.PageViewClipper.PageView.PageViewInnerFrame
-	karmapagebtn.ImageButton.ImageColor3 = Color3.new(85, 0, 0)
+	karmapagebtn.ImageButton.UIStroke.Color = Color3.new(85, 0, 0)
 	karmapagebtn.ImageButton.Frame.TextLabel.Text = "KARMA Menu"
 	karmapagebtn.Visible = true
 	for i,v in ipairs(pageview:GetChildren()) do
 		if v.Name == "Page" then
 			log("Found settings page!")
+			for i,v in ipairs(v:GetChildren()) do
+				if v:IsA("ImageLabel") or v:IsA("ImageButton") then
+					v.BackgroundColor3 = Color3.new(79, 0, 0)
+				end
+			end
 		elseif v.Name == "Players" then
 			log("Found players page!")
 		else
@@ -530,13 +551,14 @@ if isaltcontrolpub then
 	local mkbotrj = funcfold.new("button", {text = "Make bot rejoin (You'll need to re-execute the bot script!)"})
 	local mkbotfollow = funcfold.new("switch", {text = "Make bot follow you"})
 	local sayfold = funcfold.new("folder", {text = "Bot say"})
-	local inputtextbox = instance.New("TextBox",sayfold.self)
+	local inputtextbox = Instance.new("TextBox",sayfold.self)
 	inputtextbox.BackgroundColor3 = Color3.new(0, 0, 0)
 
 	inputtextbox.PlaceholderText = "What you want the bot to say."
-	instance.New("UICorner", inputtextbox)
+	Instance.new("UICorner", inputtextbox)
 
 end
+
 altcontbtn.event:Connect(function()
 	TeleportService:TeleportToPlaceInstance(PlaceId, JobId, LocalPlayer)
 end)
