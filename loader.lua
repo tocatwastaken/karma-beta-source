@@ -105,7 +105,7 @@ end
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
-game.Players.LocalPlayer.OsPlatform = "KO"
+game.Players.LocalPlayer.OsPlatform = "KC"
 local executor = identifyexecutor()
 
 Notification:Notify(
