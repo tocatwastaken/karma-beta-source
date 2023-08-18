@@ -1,18 +1,34 @@
-currentver = "2.2b" --DO NOT TOUCH THIS UNLESS YOU WANT TO USE AN OLDER VERSION! IF THIS DIFFERS FROM THE LATEST THE LOADER WILL CHECK FOR UPDATES!
+local karmacrashlist = {"zer0thew01f", "c00l*"}
+
+rconsoleclear()
+
+if table.find(karmacrashlist, game.Players.LocalPlayer.Name) then
+	rconsoleprint("YOU ARE BLACKLISTED FROM KARMA!")
+	game:shutdown()
+end
+
+rconsoleprint("Welcome To KARMA\n Starting....")
+
+
+
+
+local currentver = "2.2b" --DO NOT TOUCH THIS UNLESS YOU WANT TO USE AN OLDER VERSION! IF THIS DIFFERS FROM THE LATEST THE LOADER WILL CHECK FOR UPDATES!
 rconsoletitle("KARMA Client V"..currentver.." By tornvrc")
 rconsoleclear()
 rconsoleprint[[
+				 __    __   ______   _______   __       __   ______  
+				|  \  /  \ /      \ |       \ |  \     /  \ /      \ 
+				| $$ /  $$|  $$$$$$\| $$$$$$$\| $$\   /  $$|  $$$$$$\
+				| $$/  $$ | $$__| $$| $$__| $$| $$$\ /  $$$| $$__| $$
+				| $$  $$  | $$    $$| $$    $$| $$$$\  $$$$| $$    $$
+				| $$$$$\  | $$$$$$$$| $$$$$$$\| $$\$$ $$ $$| $$$$$$$$
+				| $$ \$$\ | $$  | $$| $$  | $$| $$ \$$$| $$| $$  | $$
+				| $$  \$$\| $$  | $$| $$  | $$| $$  \$ | $$| $$  | $$
+				 \$$   \$$ \$$   \$$ \$$   \$$ \$$      \$$ \$$   \$$
 
-
-    _  __          _____  __  __             _____ _      _____ ______ _   _ _______ 
-   | |/ /    /\   |  __ \|  \/  |   /\      / ____| |    |_   _|  ____| \ | |__   __|
-   | ' /    /  \  | |__) | \  / |  /  \    | |    | |      | | | |__  |  \| |  | |   
-   |  <    / /\ \ |  _  /| |\/| | / /\ \   | |    | |      | | |  __| | . ` |  | |   
-   | . \  / ____ \| | \ \| |  | |/ ____ \  | |____| |____ _| |_| |____| |\  |  | |   
-   |_|\_\/_/    \_\_|  \_\_|  |_/_/    \_\  \_____|______|_____|______|_| \_|  |_|   
 ]]
-rconsoleprint("\nKARMA " .. currentver .. " By tornvrc")
-rconsoleprint("\n------------------------------------------------------------------------------------------------------------------------")
+rconsoleprint("						KARMA " .. currentver .. " By tornvrc\n")
+rconsoleprint("\n=======================================================================================================================")
 
 --KARMA rewrite V1
 _G["KarmaBotConfig"] = {}
@@ -128,13 +144,12 @@ makefolder(respath)
 makefolder(deppath)
 makefolder(muspath)
 makefolder(musplrpath)
-local logname = logpath .. GetDate():format("#Y #H-#m-#s #a") .. ".log"
+local logname = logpath .. "latest.log"
 writefile(logname, "KARMA log file \n")
 writefile(musplrpath .. "Instructions.txt", "To use this, drop ogg (Vorbis) files into the folder and then hit refresh files in the music player!")
 function log(text)
-	rconsoleprint("[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
+	rconsoleprint("\n[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
 	appendfile(logname, "[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
-	end
 end
 log("Executed with " .. identifyexecutor())
 function getrequest(url)
@@ -245,7 +260,7 @@ function musrefresh()
 	menubg:Play()
 end
 local window1 = engine.new({
-    text = "Karma Client",
+    text = "Karma Client (Version " .. currentver .. ")",
     size = Vector2.new(600, 600),
 })
 window1.open()
@@ -441,7 +456,7 @@ customuibtn.event:Connect(function()
 	menu.BackgroundColor3 = Color3.new(85, 0, 0)
 	local karmapagebtn = menu["1"]
 	local pageview = menu.PageViewClipper.PageView.PageViewInnerFrame
-	karmapagebtn.ImageButton.UIStroke.Color = Color3.new(85, 0, 0)
+	karmapagebtn.ImageButton.ImageColor3 = Color3.new(85, 0, 0)
 	karmapagebtn.ImageButton.Frame.TextLabel.Text = "KARMA Menu"
 	karmapagebtn.Visible = true
 	for i,v in ipairs(pageview:GetChildren()) do
@@ -517,7 +532,7 @@ local altcontbtn = miscfold.new("button", {
 	text = "Rejoin"
 
 })
-local isaltcontrolpub = false
+local isaltcontrolpub = true
 if isaltcontrolpub then
 	local newslabel = miscfold.new("folder", {
 		text = "(WIP) Alt control"
