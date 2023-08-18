@@ -92,7 +92,7 @@ end
 PlaceId, JobId = game.PlaceId, game.JobId
 TeleportService = game:GetService("TeleportService")
 
-clientbranch = ""
+clientbranch = "beta"
 if clientbranch == "stable" then
 	upbranch = "Live"
 	latestver = loadstring(game:HttpGet("https://raw.githubusercontent.com/bakersrule2020/karma-files/main/version"))()
