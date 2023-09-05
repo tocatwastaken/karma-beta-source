@@ -1,5 +1,6 @@
 local isnewchatsystem = false
 local ReplicatedStorage = game.ReplicatedStorage
+
 warn("Zulu Starting...")
     local selectedtarget = "None"
     local player = game.Players
@@ -39,10 +40,6 @@ warn("Zulu Starting...")
 
         local currentver = "2.3b" --DO NOT TOUCH THIS UNLESS YOU WANT TO USE AN OLDER VERSION! IF THIS DIFFERS FROM THE LATEST THE LOADER WILL CHECK FOR UPDATES!
         rconsoleclear()
-        rconsoleprint("			                    Zulu " .. currentver .. " By tornvrc\n")
-        rconsoleprint("			                    Standalone Edition")
-        rconsoleprint("\nrevenge.")
-        rconsoleprint("\n=======================================================================================================================")
         rconsoletitle("Zulu Client V"..currentver.." By tornvrc | RBXLoader V0.0.1")
         
         function GetDate() --stolen from domainx because i'm bad at doing this shit lmaoooo
@@ -143,11 +140,12 @@ warn("Zulu Starting...")
         writefile(logname, "Zulu log file \n")
         writefile(musplrpath .. "Instructions.txt", "To use this, drop ogg (Vorbis) files into the folder and then hit refresh files in the music player!")
         function log(text)
-            rconsoleprint("\n[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
+            rconsoleprint("\n".."[" .. GetDate():format("#h:#m") .. "] [Zulu]: " .. text)
             print("[ZULUDEBUG]:",text)
-            appendfile(logname, "[" .. GetDate():format("#h:#m") .. "]: " .. text .. "\n")
+            appendfile(logname,"\n".. "[" .. GetDate():format("#h:#m") .. "] [Zulu]: " .. text)
         end
-        log("Executed with " .. identifyexecutor())
+        rconsoleprint"Initialized loader!"
+        log"Hello from the zulu team!"
        
         function checkstatus(plrinst)
                 return "Regular Player"
@@ -324,7 +322,9 @@ warn("Zulu Starting...")
         })
         for i,v in ipairs(game.Players:GetChildren()) do
             platreturn = checkstatus(v)
-            sel = fold1.new("button", {text = v.DisplayName or v.Name .. " | " .. platreturn})
+            nametoreturn = plr.Name
+            pcall(function() nametoreturn = plr.DisplayName end)
+            sel = fold1.new("button", {text = nametoreturn .. " | " .. platreturn})
             sel.event:Connect(function()
                 selectedtarget = v.Name
                 fold1.close()
@@ -338,7 +338,9 @@ warn("Zulu Starting...")
         end
         player.PlayerAdded:Connect(function(plr)
             platreturn = checkstatus(v)
-            sel = fold1.new("button", {text = v.DisplayName or v.Name .. " | " .. platreturn})
+            nametoreturn = plr.Name
+            pcall(nametoreturn = plr.DisplayName)
+            sel = fold1.new("button", {text = nametoreturn .. " | " .. platreturn})
             sel.event:Connect(function()
                 selectedtarget = v.Name
                 fold1.close()
