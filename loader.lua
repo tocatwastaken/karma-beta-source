@@ -43,7 +43,7 @@ warn("Zulu Starting...")
         rconsoleprint("\nrevenge.")
         rconsoleprint("\n=======================================================================================================================")
         rconsoletitle("Zulu Client V"..currentver.." By tornvrc | RBXLoader V0.0.1")
-        
+        rconsoleprint("[Zulu]: The Fedsharkz were here")
         function GetDate() --stolen from domainx because i'm bad at doing this shit lmaoooo
             local date = {}
             local months = {
