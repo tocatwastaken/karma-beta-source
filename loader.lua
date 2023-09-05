@@ -1,4 +1,5 @@
 local isnewchatsystem = false
+local ReplicatedStorage = game.ReplicatedStorage
 warn("Zulu Starting...")
     local selectedtarget = "None"
     local player = game.Players
@@ -19,7 +20,7 @@ warn("Zulu Starting...")
         end
     end
    
-        local engine = loadstring(readfile(deppath .. "moddedapi.lua"))()
+ 
        
         rconsoleprint("[Zulu]: Starting Zulu Client...")
         wait(1)
@@ -43,7 +44,7 @@ warn("Zulu Starting...")
         rconsoleprint("\nrevenge.")
         rconsoleprint("\n=======================================================================================================================")
         rconsoletitle("Zulu Client V"..currentver.." By tornvrc | RBXLoader V0.0.1")
-        rconsoleprint("[Zulu]: The Fedsharkz were here")
+        
         function GetDate() --stolen from domainx because i'm bad at doing this shit lmaoooo
             local date = {}
             local months = {
@@ -120,10 +121,10 @@ warn("Zulu Starting...")
         local executor = identifyexecutor()
 
         Notification:Notify(
-                {Title = "Welcome", Description = "Welcome to karma client version " .. currentver .. "!"},
+                {Title = "Welcome", Description = "Zulu Injected Successfully."},
                 {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
                 {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
-                if executor == "Delta UWP" or "Delta" then
+                if executor == "Delta UWP" or executor == "Delta" then
                     Notification:Notify({Title = "Known Issue", Description = "Sometimes the UI padding will break. When this happens just re-execute karma,"},
                 {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
                 {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
@@ -156,16 +157,8 @@ warn("Zulu Starting...")
             log("Begin update check...")
             if upbranch == "Live" then
                 log("Update branch: Live")
-                Notification:Notify(
-                    {Title = "Update Checker", Description = "Checking for updates, hold on a sec..."},
-                    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
-                    {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
                 if currentver == latestver then
                     log("Karma is latest version, no need to update.")
-                    Notification:Notify(
-                    {Title = "Update Checker", Description = "Karma is up to date, starting..."},
-                    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
-                    {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
                 else
                     log("Karma is out of date!")
                     Notification:Notify(
@@ -177,16 +170,10 @@ warn("Zulu Starting...")
                 end
             else
                 log("Update branch: Canary")
-                Notification:Notify(
-                    {Title = "Update Checker", Description = "Checking for updates, hold on a sec..."},
-                    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
-                    {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+                
                 if currentver == latestver then
                     log("Karma is latest version, no need to update.")
-                    Notification:Notify(
-                    {Title = "Update Checker", Description = "Karma is up to date, starting..."},
-                    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
-                    {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
+                    
                 else
                     log("Karma is out of date!")
                     Notification:Notify(
@@ -201,25 +188,17 @@ warn("Zulu Starting...")
         vercheck()
         function downloadfile(filename, url)
             log("Downloading file: " .. filename .. " From URL: " .. url)
-            Notification:Notify(
-                {Title = "Downloading File...", Description = "Downloading " .. filename .. " From " .. url},
-                {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
-                {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
             writefile(filename, game:HttpGet(url))
             log("Downloaded file: " .. filename)
         end
         if isfile(karmapath .. "ranalready.txt") then
-            Notification:Notify(
-                {Title = "Zulu", Description = "Dependencies already downloaded, skipping downloads..."},
-                {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
-                {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end}
-            )
         else
         downloadfile(respath .. "karmaicon.png", "https://raw.githubusercontent.com/bakersrule2020/karma-beta-source/main/13690184122_512.png")
         downloadfile("Zulu Client/Dependencies/squid.lua", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/squidhaxongod.lua")
         downloadfile("Zulu Client/Dependencies/flymodule.lua", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/flymodule.lua")
         downloadfile(muspath .. "zulubg.ogg", "https://github.com/bakersrule2020/karma-beta-source/raw/main/karmabg.ogg")
-        end
+		downloadfile(deppath .. "moddedapi.lua", "https://github.com/bakersrule2020/karma-beta-source/raw/main/modifieduilib.lua")
+	end
         dofile("Zulu Client/Dependencies/flymodule.lua")
 
         local menubg = Instance.new("Sound", musparent)
@@ -241,6 +220,7 @@ warn("Zulu Starting...")
             menubg.Looped = true
             menubg:Play()
         end
+		local engine = loadstring(readfile(deppath .. "moddedapi.lua"))()
         local window1 = engine.new({
             text = "Zulu Client (Version " .. currentver .. ")",
             size = Vector2.new(600, 600),
@@ -289,6 +269,9 @@ warn("Zulu Starting...")
         })
         local popfuckfold = exectab.new("folder", {
             text = "Project Popfuck"
+        })
+        local annoyfold = exectab.new("folder", {
+            text = "Annoy zero (REMOVE FROM PRODUCTION BUILD!)"
         })
         local popfucktog_gore = popfuckfold.new("switch", {
             text = "Dental Gore Spammer"
@@ -340,19 +323,14 @@ warn("Zulu Starting...")
             text = "Functions"
         })
         for i,v in ipairs(game.Players:GetChildren()) do
-            dock = fold1.new("dock")
             platreturn = checkstatus(v)
-            dock.new("label", {
-                
-                text = v.DisplayName .. " | " .. platreturn
-            })
-            sel = dock.new("button", {text = "Select"})
+            sel = fold1.new("button", {text = v.DisplayName or v.Name .. " | " .. platreturn})
             sel.event:Connect(function()
                 selectedtarget = v.Name
                 fold1.close()
             end)
             player.PlayerRemoving:Connect(function(plr)
-                dock.self:Destroy()
+                sel.self:Destroy()
                 if selectedtarget == plr.Name then
                     selectedtarget = "None"
                 end
@@ -360,18 +338,13 @@ warn("Zulu Starting...")
         end
         player.PlayerAdded:Connect(function(plr)
             platreturn = checkstatus(v)
-                dock = fold1.new("dock")
-            dock.new("label", {
-                
-                text = v.DisplayName or v.Name .. " | " .. platreturn
-            })
-            sel = dock.new("button", {text = "Select"})
+            sel = fold1.new("button", {text = v.DisplayName or v.Name .. " | " .. platreturn})
             sel.event:Connect(function()
                 selectedtarget = v.Name
                 fold1.close()
             end)
             player.PlayerRemoving:Connect(function(plr)
-                dock.self:Destroy()
+                sel.self:Destroy()
                 if selectedtarget == plr.Name then
                     selectedtarget = "None"
                 end
@@ -499,7 +472,7 @@ warn("Zulu Starting...")
                 menubg:Play()
 				print(string.gsub(selectedsong, karmapath .. "Music Player (OGG files only)/", ""))
 				if not isnewchatsystem then
-					game.Chat:Chat(game.Players.LocalPlayer.Character, "[Zulu]: Now Playing: " .. string.gsub(selectedsong, karmapath .. "Music Player (OGG files only)/", ""))
+					ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("[Zulu]: Now Playing: " .. string.gsub(selectedsong, karmapath .. "Music Player (OGG files only)/", ""), "All")
 				else
 					game.TextChatService.TextChannels.RBXGeneral:SendAsync("[Zulu]: Now Playing: " .. string.gsub(selectedsong, karmapath .. "Music Player (OGG files only)/", ""))
 				end

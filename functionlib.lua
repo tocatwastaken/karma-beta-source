@@ -1,4 +1,4 @@
-_G["RBXUtils"] = {
+getgenv().RBXUtils = {
     OnPlayerJoined = function(functoconnect)
         connection = game.Players.PlayerAdded:Connect(functoconnect)
         return connection
@@ -28,7 +28,7 @@ _G["RBXUtils"] = {
         rconsoleclear()
     end,
     ConsoleTitle = function(title)
-        rconsoletitle(title)
+        rconsoletitle(title .. " | Powered By RBXUtils V1")
     end,
     ConsolePrint = function(msg)
         rconsoleprint(msg .. "\n")
@@ -42,5 +42,13 @@ _G["RBXUtils"] = {
     ConsoleInfo = function(msg)
         rconsoleprint("[INFO]", msg .. "\n")
     end,
-    
+    GetRBXUtilsClosure = function()
+        local tabletoreturn = {
+            toolname = "RBXUtils";
+            toolver = "0.0.1";
+            tooldesc = "A simple library for scripters to use.";
+        }
+        return tabletoreturn
+    end,
 }
+print("RBXUtils Loaded!")
