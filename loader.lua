@@ -339,7 +339,7 @@ warn("Zulu Starting...")
         player.PlayerAdded:Connect(function(plr)
             platreturn = checkstatus(v)
             nametoreturn = plr.Name
-            pcall(nametoreturn = plr.DisplayName)
+            pcall(function() nametoreturn = plr.DisplayName end)
             sel = fold1.new("button", {text = nametoreturn .. " | " .. platreturn})
             sel.event:Connect(function()
                 selectedtarget = v.Name
