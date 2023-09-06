@@ -113,8 +113,6 @@ warn("Zulu Starting...")
 
         local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
         local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
-
-        game.Players.LocalPlayer.OsPlatform = "KO"
         local executor = identifyexecutor()
 
         Notification:Notify(
@@ -144,7 +142,21 @@ warn("Zulu Starting...")
             print("[ZULUDEBUG]:",text)
             appendfile(logname,"\n".. "[" .. GetDate():format("#h:#m") .. "] [Zulu]: " .. text)
         end
-        rconsoleprint"Initialized loader!"
+        rconsoleprint"Initialized loader!\n"
+        rconsoleprint[[
+            ________  __    __  __       __    __ 
+           |        \|  \  |  \|  \     |  \  |  \
+            \$$$$$$$$| $$  | $$| $$     | $$  | $$
+               /  $$ | $$  | $$| $$     | $$  | $$
+              /  $$  | $$  | $$| $$     | $$  | $$
+             /  $$   | $$  | $$| $$     | $$  | $$
+            /  $$___ | $$__/ $$| $$_____| $$__/ $$
+           |  $$    \ \$$    $$| $$     \\$$    $$
+            \$$$$$$$$  \$$$$$$  \$$$$$$$$ \$$$$$$ 
+                                                  
+                                                  
+                                                  
+           ]]
         log"Hello from the zulu team!"
        
         function checkstatus(plrinst)
@@ -268,9 +280,9 @@ warn("Zulu Starting...")
         local popfuckfold = exectab.new("folder", {
             text = "Project Popfuck"
         })
-        local annoyfold = exectab.new("folder", {
+        --[[ local annoyfold = exectab.new("folder", {
             text = "Annoy zero (REMOVE FROM PRODUCTION BUILD!)"
-        })
+        }) ]]
         local popfucktog_gore = popfuckfold.new("switch", {
             text = "Dental Gore Spammer"
         })
@@ -322,15 +334,15 @@ warn("Zulu Starting...")
         })
         for i,v in ipairs(game.Players:GetChildren()) do
             platreturn = checkstatus(v)
-            nametoreturn = plr.Name
-            pcall(function() nametoreturn = plr.DisplayName end)
+            nametoreturn = v.Name
+            pcall(function() nametoreturn = v.DisplayName end)
             sel = fold1.new("button", {text = nametoreturn .. " | " .. platreturn})
             sel.event:Connect(function()
                 selectedtarget = v.Name
                 fold1.close()
             end)
             player.PlayerRemoving:Connect(function(plr)
-                sel.self:Destroy()
+                sel:Destroy()
                 if selectedtarget == plr.Name then
                     selectedtarget = "None"
                 end
@@ -346,7 +358,7 @@ warn("Zulu Starting...")
                 fold1.close()
             end)
             player.PlayerRemoving:Connect(function(plr)
-                sel.self:Destroy()
+                sel:Destroy()
                 if selectedtarget == plr.Name then
                     selectedtarget = "None"
                 end
@@ -446,9 +458,7 @@ warn("Zulu Starting...")
         selectedsong = "None"
         function refreshsongs()
             for i,v in ipairs(listfiles(musplrpath)) do
-                log("Found file: " .. v .. ". Checking if it is an OGG...")
                 if string.find(v,".ogg") then
-                    log("File " .. v .. " Is an OGG, adding to list...")
                     songlisting = pcall(musdrop.new(v))
                 end
             end

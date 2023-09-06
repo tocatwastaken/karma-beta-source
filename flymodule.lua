@@ -4,17 +4,50 @@ FLYING = false
 QEfly = true
 iyflyspeed = 1
 vehicleflyspeed = 1
+function getRoot(char)
+	local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
+	return rootPart
+end
 function sFLY(vfly)
 	repeat wait() until Players.LocalPlayer and Players.LocalPlayer.Character and getRoot(Players.LocalPlayer.Character) and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 	repeat wait() until IYMouse
 	if flyKeyDown or flyKeyUp then flyKeyDown:Disconnect() flyKeyUp:Disconnect() end
-
 	local T = getRoot(Players.LocalPlayer.Character)
 	local CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
 	local lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
 	local SPEED = 0
-
 	local function FLY()
+		flyKeyDown = IYMouse.KeyDown:Connect(function(KEY)
+			if KEY:lower() == 'w' then
+				CONTROL.F = (vfly and vehicleflyspeed or iyflyspeed)
+			elseif KEY:lower() == 's' then
+				CONTROL.B = - (vfly and vehicleflyspeed or iyflyspeed)
+			elseif KEY:lower() == 'a' then
+				CONTROL.L = - (vfly and vehicleflyspeed or iyflyspeed)
+			elseif KEY:lower() == 'd' then 
+				CONTROL.R = (vfly and vehicleflyspeed or iyflyspeed)
+			elseif QEfly and KEY:lower() == 'e' then
+				CONTROL.Q = (vfly and vehicleflyspeed or iyflyspeed)*2
+			elseif QEfly and KEY:lower() == 'q' then
+				CONTROL.E = -(vfly and vehicleflyspeed or iyflyspeed)*2
+			end
+			pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Track end)
+		end)
+		flyKeyUp = IYMouse.KeyUp:Connect(function(KEY)
+			if KEY:lower() == 'w' then
+				CONTROL.F = 0
+			elseif KEY:lower() == 's' then
+				CONTROL.B = 0
+			elseif KEY:lower() == 'a' then
+				CONTROL.L = 0
+			elseif KEY:lower() == 'd' then
+				CONTROL.R = 0
+			elseif KEY:lower() == 'e' then
+				CONTROL.Q = 0
+			elseif KEY:lower() == 'q' then
+				CONTROL.E = 0
+			end
+		end)
 		FLYING = true
 		local BG = Instance.new('BodyGyro')
 		local BV = Instance.new('BodyVelocity')
@@ -55,37 +88,7 @@ function sFLY(vfly)
 			end
 		end)
 	end
-	flyKeyDown = IYMouse.KeyDown:Connect(function(KEY)
-		if KEY:lower() == 'w' then
-			CONTROL.F = (vfly and vehicleflyspeed or iyflyspeed)
-		elseif KEY:lower() == 's' then
-			CONTROL.B = - (vfly and vehicleflyspeed or iyflyspeed)
-		elseif KEY:lower() == 'a' then
-			CONTROL.L = - (vfly and vehicleflyspeed or iyflyspeed)
-		elseif KEY:lower() == 'd' then 
-			CONTROL.R = (vfly and vehicleflyspeed or iyflyspeed)
-		elseif QEfly and KEY:lower() == 'e' then
-			CONTROL.Q = (vfly and vehicleflyspeed or iyflyspeed)*2
-		elseif QEfly and KEY:lower() == 'q' then
-			CONTROL.E = -(vfly and vehicleflyspeed or iyflyspeed)*2
-		end
-		pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Track end)
-	end)
-	flyKeyUp = IYMouse.KeyUp:Connect(function(KEY)
-		if KEY:lower() == 'w' then
-			CONTROL.F = 0
-		elseif KEY:lower() == 's' then
-			CONTROL.B = 0
-		elseif KEY:lower() == 'a' then
-			CONTROL.L = 0
-		elseif KEY:lower() == 'd' then
-			CONTROL.R = 0
-		elseif KEY:lower() == 'e' then
-			CONTROL.Q = 0
-		elseif KEY:lower() == 'q' then
-			CONTROL.E = 0
-		end
-	end)
+	
 	FLY()
 end
 
