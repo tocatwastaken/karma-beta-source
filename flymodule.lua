@@ -1,3 +1,5 @@
+local Players = game.Players
+local IYMouse = game.Players.LocalPlayer:GetMouse()
 FLYING = false
 QEfly = true
 iyflyspeed = 1
@@ -99,5 +101,5 @@ _G.FlyOn = function()
 	sFLY(false)
 end
 _G.FlyOff = function()
-	NOFLY
+	NOFLY()
 end
