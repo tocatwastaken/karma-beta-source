@@ -51,4 +51,4 @@ getgenv().RBXUtils = {
         return tabletoreturn
     end,
 }
-print(" Loaded!")
+print("Initialized Utilities.")
