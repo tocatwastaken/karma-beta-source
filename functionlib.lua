@@ -28,7 +28,7 @@ getgenv().RBXUtils = {
         rconsoleclear()
     end,
     ConsoleTitle = function(title)
-        rconsoletitle(title .. " | Powered By RBXUtils V1")
+        rconsoletitle(title .. " | Powered By RBXLoader")
     end,
     ConsolePrint = function(msg)
         rconsoleprint(msg .. "\n")
@@ -51,4 +51,4 @@ getgenv().RBXUtils = {
         return tabletoreturn
     end,
 }
-print("RBXUtils Loaded!")
+print(" Loaded!")

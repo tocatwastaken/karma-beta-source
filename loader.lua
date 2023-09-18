@@ -1,7 +1,10 @@
 local isnewchatsystem = false
 local ReplicatedStorage = game.ReplicatedStorage
-
+local logservice = game.LogService
 warn("Zulu Starting...")
+    if _G.ConnectionForLogging then
+        _G.ConnectionForLogging:Disconnect()
+    end
     local selectedtarget = "None"
     local player = game.Players
     local httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
@@ -15,14 +18,42 @@ warn("Zulu Starting...")
     local logpath = karmapath .. "Logs/"
     local muspath = karmapath .. "MenuBG/"
     local respath = karmapath .. "Resources/"
+    local httpservice = game:GetService("HttpService")
+    local defaultconfig = {
+        shouldplaybg = true;
+        verboselogging = true;
+        showtranssupportmsg = true;
+    }
+    local function saveconfig(configtable)
+        local toencode = configtable
+        writefile(karmapath .. respath .. "config.json", httpservice:JSONEncode(toencode))
+    end
+    local int = 0
+    local function getconfig()
+        if isfile(karmapath .. respath .. "config.json") then
+            return httpservice:JSONDecode(readfile(karmapath .. respath .. "config.json"))
+        else
+            while not int == 5 do
+            saveconfig(defaultconfig)
+            int = int + 1
+            end
+            if int == 5 then
+                warn("Exhausted config loading timeout. Fix this!")
+            return defaultconfig
+            else
+                return defaultconfig 
+            end
+        end
+    end
     for i,v in ipairs(musparent:GetChildren()) do
         if v:IsA("Sound") then
             v:Destroy()
         end
     end
+    
+
    
  
-       
         rconsoleprint("[Zulu]: Starting Zulu Client...")
         wait(1)
         local karmacrashlist = {"zer0thew01f", "c00l*"}
@@ -40,7 +71,7 @@ warn("Zulu Starting...")
 
         local currentver = "2.3b" --DO NOT TOUCH THIS UNLESS YOU WANT TO USE AN OLDER VERSION! IF THIS DIFFERS FROM THE LATEST THE LOADER WILL CHECK FOR UPDATES!
         rconsoleclear()
-        rconsoletitle("Zulu Client V"..currentver.." By tornvrc | RBXLoader V0.0.1")
+        rconsoletitle("Zulu Client V"..currentver.." By tornvrc | Enjoy! :trans_heart:")
         
         function GetDate() --stolen from domainx because i'm bad at doing this shit lmaoooo
             local date = {}
@@ -157,8 +188,29 @@ warn("Zulu Starting...")
                                                   
                                                   
            ]]
-        log"Hello from the zulu team!"
-       
+        log"Thanks for choosing zulu! Made with :trans_heart: by tornvrc"
+       if getconfig().showtranssupportmsg then
+        log"Did you know?\nTrans rights"
+       end
+       if getconfig().verboselogging then
+           _G.ConnectionForLogging = logservice.MessageOut:Connect(function(text, typeoflog)
+                if typeoflog == Enum.MessageType.MessageOutput then
+                        if string.find(text, "ZULUDEBUG") then
+                            return
+                        end
+                        rconsoleprint("\n" .."[" .. GetDate():format("#h:#m") .. "] " .. "[Roblox Log: Output]: " .. text)
+                    elseif typeoflog == Enum.MessageType.MessageInfo then
+                        rconsoleprint("\n".. "[" .. GetDate():format("#h:#m") .. "] " .. "[Roblox Log: Info]: " .. text)
+                    elseif typeoflog == Enum.MessageType.MessageWarning then
+                        if string.find(text, "Zulu") then
+                            return
+                        end
+                        rconsoleprint("\n" .."[" .. GetDate():format("#h:#m") .. "] " ..  "[Roblox Log: Warning]: " .. text)
+                    elseif typeoflog == Enum.MessageType.MessageError then
+                        rconsoleprint("\n".. "[" .. GetDate():format("#h:#m") .. "] " .. "[Roblox Log: Error]: " .. text)
+                end
+            end)
+       end
         function checkstatus(plrinst)
                 return "Regular Player"
         end
@@ -182,7 +234,7 @@ warn("Zulu Starting...")
                 log("Update branch: Canary")
                 
                 if currentver == latestver then
-                    log("Karma is latest version, no need to update.")
+                    log("Zulu is latest version, no need to update.")
                     
                 else
                     log("Karma is out of date!")
@@ -358,10 +410,14 @@ warn("Zulu Starting...")
                 fold1.close()
             end)
             player.PlayerRemoving:Connect(function(plr)
+                if sel.self.Parent.Name == "Presets" then
+                    return
+                else
                 sel:Destroy()
                 if selectedtarget == plr.Name then
                     selectedtarget = "None"
                 end
+            end
             end)
             end)
         local tpbtn = fold2.new("button", {text = "Teleport To Target"})
@@ -560,6 +616,7 @@ warn("Zulu Starting...")
                 
             end
         end
+        log("Zulu - Ham Sandwich Edition loaded.")
         if not isnewchatsystem then
             game.StarterGui:SetCore( "ChatMakeSystemMessage",  { Text = "[Zulu]: Thanks for using Zulu!", Color = Color3.fromRGB( 255,255,255 ), Font = Enum.Font.Oswald, FontSize = Enum.FontSize.Size60} )
         else

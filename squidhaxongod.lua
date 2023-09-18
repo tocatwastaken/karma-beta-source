@@ -5,7 +5,6 @@ for i,v in ipairs(glassparent:GetChildren()) do
 		for t,x in ipairs(v:GetChildren()) do
 			x.CanCollide = true
 			for b,c in ipairs(x:GetChildren()) do
-					print("Found touch interest!")
 					c:Destroy()
 			end
 		end
