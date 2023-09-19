@@ -1,0 +1,1 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/bakersrule2020/karma-beta-source/main/loader.lua"))
