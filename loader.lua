@@ -1,7 +1,7 @@
 local isnewchatsystem = false
 local ReplicatedStorage = game.ReplicatedStorage
 local logservice = game.LogService
-warn("Zulu Starting...")
+warn("Saturn Starting...")
     if _G.ConnectionForLogging then
         _G.ConnectionForLogging:Disconnect()
     end
@@ -10,7 +10,7 @@ warn("Zulu Starting...")
     local httprequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
     local LocalPlayer = player.LocalPlayer
     local Humanoid = LocalPlayer.Character.Humanoid
-    local karmapath = "/Zulu Client/"
+    local karmapath = "/Saturn Client/"
     local musparent = game.CoreGui
     local GuiService = game:GetService("GuiService")
     local deppath = karmapath .. "Dependencies/"
@@ -54,24 +54,24 @@ warn("Zulu Starting...")
 
    
  
-        rconsoleprint("[Zulu]: Starting Zulu Client...")
+        print("[Saturn]: Starting Saturn Client...")
         wait(1)
         local karmacrashlist = {"zer0thew01f", "c00l*"}
 
         rconsoleclear()
 
         if table.find(karmacrashlist, game.Players.LocalPlayer.Name) then
-            rconsoleprint("YOU ARE BLACKLISTED FROM ZULU!")
+            print("YOU ARE BLACKLISTED FROM Saturn!")
             game:shutdown()
         end
 
-        rconsoleprint("Welcome To Zulu\n Starting....")
+        print("Welcome To Saturn\n Starting....")
 
 
 
         local currentver = "2.3b" --DO NOT TOUCH THIS UNLESS YOU WANT TO USE AN OLDER VERSION! IF THIS DIFFERS FROM THE LATEST THE LOADER WILL CHECK FOR UPDATES!
-        rconsoleclear()
-        rconsoletitle("Zulu Client V"..currentver.." By tornvrc | Enjoy! :trans_heart:")
+        --rconsoleclear()
+        --rconsoletitle("Saturn Client V"..currentver.." By tornvrc | Enjoy! :trans_heart:")
         
         function GetDate() --stolen from domainx because i'm bad at doing this shit lmaoooo
             local date = {}
@@ -132,7 +132,7 @@ warn("Zulu Starting...")
         PlaceId, JobId = game.PlaceId, game.JobId
         TeleportService = game:GetService("TeleportService")
 
-        clientbranch = ""
+        clientbranch = "beta"
         if clientbranch == "stable" then
             upbranch = "Live"
             latestver = loadstring(game:HttpGet("https://raw.githubusercontent.com/bakersrule2020/karma-files/main/version"))()
@@ -147,7 +147,7 @@ warn("Zulu Starting...")
         local executor = identifyexecutor()
 
         Notification:Notify(
-                {Title = "Welcome", Description = "Zulu Injected Successfully."},
+                {Title = "Welcome", Description = "Saturn Injected Successfully."},
                 {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
                 {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) end})
                 if executor == "Delta UWP" or executor == "Delta" then
@@ -166,15 +166,15 @@ warn("Zulu Starting...")
         makefolder(muspath)
         makefolder(musplrpath)
         local logname = logpath .. "latest.log"
-        writefile(logname, "Zulu log file \n")
+        writefile(logname, "Saturn log file \n")
         writefile(musplrpath .. "Instructions.txt", "To use this, drop ogg (Vorbis) files into the folder and then hit refresh files in the music player!")
         function log(text)
-            rconsoleprint("\n".."[" .. GetDate():format("#h:#m") .. "] [Zulu]: " .. text)
-            print("[ZULUDEBUG]:",text)
-            appendfile(logname,"\n".. "[" .. GetDate():format("#h:#m") .. "] [Zulu]: " .. text)
+            print("\n".."[" .. GetDate():format("#h:#m") .. "] [Saturn]: " .. text)
+            --print("[SaturnDEBUG]:",text)
+            appendfile(logname,"\n".. "[" .. GetDate():format("#h:#m") .. "] [Saturn]: " .. text)
         end
-        rconsoleprint"Initialized loader!\n"
-        rconsoleprint[[
+        print"Initialized loader!\n"
+        print[[
             ________  __    __  __       __    __ 
            |        \|  \  |  \|  \     |  \  |  \
             \$$$$$$$$| $$  | $$| $$     | $$  | $$
@@ -188,26 +188,26 @@ warn("Zulu Starting...")
                                                   
                                                   
            ]]
-        log"Thanks for choosing zulu! Made with :trans_heart: by tornvrc"
+        log"Thanks for choosing Saturn! Made with :trans_heart: by tornvrc"
        if getconfig().showtranssupportmsg then
         log"Did you know?\nTrans rights"
        end
        if getconfig().verboselogging then
            _G.ConnectionForLogging = logservice.MessageOut:Connect(function(text, typeoflog)
                 if typeoflog == Enum.MessageType.MessageOutput then
-                        if string.find(text, "ZULUDEBUG") then
+                        if string.find(text, "SaturnDEBUG") then
                             return
                         end
-                        rconsoleprint("\n" .."[" .. GetDate():format("#h:#m") .. "] " .. "[Roblox Log: Output]: " .. text)
+                        appendfile(logname,"\n" .."[" .. GetDate():format("#h:#m") .. "] " .. "[Roblox Log: Output]: " .. text)
                     elseif typeoflog == Enum.MessageType.MessageInfo then
-                        rconsoleprint("\n".. "[" .. GetDate():format("#h:#m") .. "] " .. "[Roblox Log: Info]: " .. text)
+                        appendfile(logname,"\n".. "[" .. GetDate():format("#h:#m") .. "] " .. "[Roblox Log: Info]: " .. text)
                     elseif typeoflog == Enum.MessageType.MessageWarning then
-                        if string.find(text, "Zulu") then
+                        if string.find(text, "Saturn") then
                             return
                         end
-                        rconsoleprint("\n" .."[" .. GetDate():format("#h:#m") .. "] " ..  "[Roblox Log: Warning]: " .. text)
+                        appendfile(logname,"\n" .."[" .. GetDate():format("#h:#m") .. "] " ..  "[Roblox Log: Warning]: " .. text)
                     elseif typeoflog == Enum.MessageType.MessageError then
-                        rconsoleprint("\n".. "[" .. GetDate():format("#h:#m") .. "] " .. "[Roblox Log: Error]: " .. text)
+                        pappendfile(logname,"\n".. "[" .. GetDate():format("#h:#m") .. "] " .. "[Roblox Log: Error]: " .. text)
                 end
             end)
        end
@@ -234,7 +234,7 @@ warn("Zulu Starting...")
                 log("Update branch: Canary")
                 
                 if currentver == latestver then
-                    log("Zulu is latest version, no need to update.")
+                    log("Saturn is latest version, no need to update.")
                     
                 else
                     log("Karma is out of date!")
@@ -256,15 +256,15 @@ warn("Zulu Starting...")
         if isfile(karmapath .. "ranalready.txt") then
         else
         downloadfile(respath .. "karmaicon.png", "https://raw.githubusercontent.com/bakersrule2020/karma-beta-source/main/13690184122_512.png")
-        downloadfile("Zulu Client/Dependencies/squid.lua", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/squidhaxongod.lua")
-        downloadfile("Zulu Client/Dependencies/flymodule.lua", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/flymodule.lua")
-        downloadfile(muspath .. "zulubg.ogg", "https://github.com/bakersrule2020/karma-beta-source/raw/main/karmabg.ogg")
+        downloadfile("Saturn Client/Dependencies/squid.lua", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/squidhaxongod.lua")
+        downloadfile("Saturn Client/Dependencies/flymodule.lua", "https://raw.githubusercontent.com/bakersrule2020/karma-files/main/flymodule.lua")
+        downloadfile(muspath .. "Saturnbg.ogg", "https://github.com/bakersrule2020/karma-beta-source/raw/main/karmabg.ogg")
 		downloadfile(deppath .. "moddedapi.lua", "https://github.com/bakersrule2020/karma-beta-source/raw/main/modifieduilib.lua")
 	end
-        dofile("Zulu Client/Dependencies/flymodule.lua")
+        dofile("Saturn Client/Dependencies/flymodule.lua")
 
         local menubg = Instance.new("Sound", musparent)
-        menubg.SoundId = getcustomasset(muspath .. "zulubg.ogg")
+        menubg.SoundId = getcustomasset(muspath .. "Saturnbg.ogg")
         menubg.Looped = true
         menubg:Play()
         function setmenuaudio(string)
@@ -284,7 +284,7 @@ warn("Zulu Starting...")
         end
 		local engine = loadstring(readfile(deppath .. "moddedapi.lua"))()
         local window1 = engine.new({
-            text = "Zulu Client (Version " .. currentver .. ")",
+            text = "Saturn Client (Version " .. currentver .. ")",
             size = Vector2.new(600, 600),
         })
         window1.open()
@@ -484,7 +484,7 @@ warn("Zulu Starting...")
             local karmapagebtn = menu["1"]
             local pageview = menu.PageViewClipper.PageView.PageViewInnerFrame
             karmapagebtn.ImageButton.ImageColor3 = Color3.new(85, 0, 0)
-            karmapagebtn.ImageButton.Frame.TextLabel.Text = "Zulu Menu"
+            karmapagebtn.ImageButton.Frame.TextLabel.Text = "Saturn Menu"
             karmapagebtn.Visible = true
             for i,v in ipairs(pageview:GetChildren()) do
                 if v.Name == "Page" then
@@ -540,9 +540,9 @@ warn("Zulu Starting...")
                 menubg:Play()
 				print(string.gsub(selectedsong, karmapath .. "Music Player (OGG files only)/", ""))
 				if not isnewchatsystem then
-					ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("[Zulu]: Now Playing: " .. string.gsub(selectedsong, karmapath .. "Music Player (OGG files only)/", ""), "All")
+					ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("[Saturn]: Now Playing: " .. string.gsub(selectedsong, karmapath .. "Music Player (OGG files only)/", ""), "All")
 				else
-					game.TextChatService.TextChannels.RBXGeneral:SendAsync("[Zulu]: Now Playing: " .. string.gsub(selectedsong, karmapath .. "Music Player (OGG files only)/", ""))
+					game.TextChatService.TextChannels.RBXGeneral:SendAsync("[Saturn]: Now Playing: " .. string.gsub(selectedsong, karmapath .. "Music Player (OGG files only)/", ""))
 				end
             else
                 menubg:Stop()
@@ -616,13 +616,13 @@ warn("Zulu Starting...")
                 
             end
         end
-        log("Zulu - Ham Sandwich Edition loaded.")
+        log("Saturn - Ham Sandwich Edition loaded.")
         if not isnewchatsystem then
-            game.StarterGui:SetCore( "ChatMakeSystemMessage",  { Text = "[Zulu]: Thanks for using Zulu!", Color = Color3.fromRGB( 255,255,255 ), Font = Enum.Font.Oswald, FontSize = Enum.FontSize.Size60} )
+            game.StarterGui:SetCore( "ChatMakeSystemMessage",  { Text = "[Saturn]: Thanks for using Saturn!", Color = Color3.fromRGB( 255,255,255 ), Font = Enum.Font.Oswald, FontSize = Enum.FontSize.Size60} )
         else
-            game.TextChatService.TextChannels.RBXGeneral:DisplaySystemMessage("[Zulu]: Thanks for using Zulu!")
+            game.TextChatService.TextChannels.RBXGeneral:DisplaySystemMessage("[Saturn]: Thanks for using Saturn!")
         end
-        writefile(karmapath .. "ranalready.txt", "This file lets Zulu know you've ran it before, so you don't need to download assets.")
+        writefile(karmapath .. "ranalready.txt", "This file lets Saturn know you've ran it before, so you don't need to download assets.")
 
         isloading = false
-        warn("Zulu loaded. Have fun.")
+        warn("Saturn loaded. Have fun.")
