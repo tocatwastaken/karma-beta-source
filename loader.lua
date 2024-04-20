@@ -24,6 +24,9 @@ warn("Saturn Starting...")
         verboselogging = true;
         showtranssupportmsg = true;
     }
+    function dofile(filetorun)
+        loadstring(readfile(filetorun))()
+    end
     local function saveconfig(configtable)
         local toencode = configtable
         writefile(karmapath .. respath .. "config.json", httpservice:JSONEncode(toencode))
