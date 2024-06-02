@@ -61,7 +61,7 @@ warn("Saturn Starting...")
         wait(1)
         local karmacrashlist = {"zer0thew01f", "c00l*"}
 
-        rconsoleclear()
+        --clear()
 
         if table.find(karmacrashlist, game.Players.LocalPlayer.Name) then
             print("YOU ARE BLACKLISTED FROM Saturn!")
@@ -73,8 +73,8 @@ warn("Saturn Starting...")
 
 
         local currentver = "2.3b" --DO NOT TOUCH THIS UNLESS YOU WANT TO USE AN OLDER VERSION! IF THIS DIFFERS FROM THE LATEST THE LOADER WILL CHECK FOR UPDATES!
-        --rconsoleclear()
-        --rconsoletitle("Saturn Client V"..currentver.." By tornvrc | Enjoy! :trans_heart:")
+        ----clear()
+        ----title("Saturn Client V"..currentver.." By tornvrc | Enjoy! :trans_heart:")
         
         function GetDate() --stolen from domainx because i'm bad at doing this shit lmaoooo
             local date = {}
