@@ -58,7 +58,7 @@ warn("Saturn Starting...")
    
  
         print("[Saturn]: Starting Saturn Client...")
-        wait(1)
+        task.wait(1)
         local karmacrashlist = {"zer0thew01f", "c00l*"}
 
         --clear()
@@ -343,7 +343,7 @@ warn("Saturn Starting...")
         })
         popfucktog_gore.event:Connect(function(bool)
             while bool do
-                wait(0)
+                task.wait(0)
                 local args = {
                     [1] = "Hey guys",
                     [2] = {
@@ -359,7 +359,7 @@ warn("Saturn Starting...")
         })
         popfucktog_lemon.event:Connect(function(bool)
             while bool do
-                wait(0)
+                task.wait(0)
                 local args = {
                     [1] = "adoptmesextape ",
                     [2] = {
@@ -427,7 +427,7 @@ warn("Saturn Starting...")
         tpbtn.event:Connect(function()
             if selectedtarget == "None" then
                 warnlabel = fold2.new("label", {text = "Select someone first!"})
-                wait(3)
+                task.wait(3)
                 warnlabel.Destroy()
             else
                 for i,v in ipairs(player:GetPlayers()) do
@@ -442,7 +442,7 @@ warn("Saturn Starting...")
             if bool then
                     if selectedtarget == "None" then
                         warnlabel = fold2.new("label", {text = "Select someone first!"})
-                        wait(3)
+                        task.wait(3)
                         warnlabel.Destroy()
                     else
                         for i,v in ipairs(player:GetPlayers()) do
